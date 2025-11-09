@@ -1,0 +1,50 @@
+name: LFS Resumable Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+
+    steps:
+      - name: Prepare /mnt/lfs workspace
+        run: |
+          sudo mkdir -pv /mnt/lfs
+          sudo chown -R runner:runner /mnt/lfs
+
+      - name: Restore previous LFS work (if exists)
+        uses: actions/download-artifact@v4
+        with:
+          name: lfs-work
+          path: /mnt/
+
+      - name: Extract previous LFS archive
+        run: |
+          if [ -f /mnt/lfs-work.tar.gz ]; then
+            echo "Extracting previous LFS work..."
+            tar -xzf /mnt/lfs-work.tar.gz -C /mnt
+          else
+            echo "No previous build found. Starting fresh."
+          fi
+
+      - name: Start tmate session
+        uses: mxschmitt/action-tmate@v3
+        with:
+          sudo: false
+
+      - name: Compress updated LFS tree
+        if: always()
+        run: |
+          echo "Saving new LFS progress..."
+          tar -czf /mnt/lfs-work.tar.gz -C /mnt lfs
+
+      - name: Upload updated LFS progress
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lfs-work
+          path: /mnt/lfs-work.tar.gz
