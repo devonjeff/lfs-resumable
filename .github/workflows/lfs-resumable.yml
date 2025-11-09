@@ -18,7 +18,7 @@ jobs:
 
       - name: Restore previous LFS work (if exists)
         uses: actions/download-artifact@v4
-        continue-on-error: true   # ✅ prevents workflow from stopping
+        continue-on-error: true
         with:
           name: lfs-work
           path: /mnt/
@@ -35,7 +35,7 @@ jobs:
       - name: Start tmate session
         uses: mxschmitt/action-tmate@v3
         with:
-          sudo: sudo
+          sudo: true
 
       - name: Save LFS progress
         run: |
