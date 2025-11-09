@@ -10,8 +10,8 @@ jobs:
   ssh:
     runs-on: ubuntu-latest
     steps:
-      - name: Start tmate session (SSH key secured)
-        uses: mxschmitt/action-tmate@v3
+      - name: Start tmate session (public SSH)
+        uses: mxschmitt/action-tmate@v2
         with:
           ssh-keys: ${{ secrets.TMATE_KEY }}
-          sudo: false
+          sudo: true
