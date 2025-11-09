@@ -18,15 +18,16 @@ jobs:
 
       - name: Restore previous LFS work (if exists)
         uses: actions/download-artifact@v4
+        continue-on-error: true   # ✅ prevents workflow from stopping
         with:
           name: lfs-work
-          path: .
+          path: /mnt/
 
       - name: Extract previous LFS archive
         run: |
-          if [ -f lfs-work.tar.gz ]; then
+          if [ -f /mnt/lfs-work.tar.gz ]; then
             echo "Extracting previous LFS work..."
-            tar -xzf lfs-work.tar.gz -C /mnt
+            tar -xzf /mnt/lfs-work.tar.gz -C /mnt
           else
             echo "No previous build found. Starting fresh."
           fi
@@ -35,7 +36,7 @@ jobs:
         uses: mxschmitt/action-tmate@v3
         with:
           sudo: sudo
-          
+
       - name: Save LFS progress
         run: |
           echo "Saving new LFS progress..."
