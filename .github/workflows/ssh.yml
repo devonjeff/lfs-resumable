@@ -1,0 +1,20 @@
+name: SSH Access
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ssh:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Start tmate session (SSH key secured)
+        uses: mxschmitt/action-tmate@v3
+        with:
+          ssh_key: ${{ secrets.TMATE_KEY }}
+          sudo: false
