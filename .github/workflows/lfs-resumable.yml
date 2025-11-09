@@ -20,13 +20,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: lfs-work
-          path: /mnt/
+          path: .
 
       - name: Extract previous LFS archive
         run: |
-          if [ -f /mnt/lfs-work.tar.gz ]; then
+          if [ -f lfs-work.tar.gz ]; then
             echo "Extracting previous LFS work..."
-            tar -xzf /mnt/lfs-work.tar.gz -C /mnt
+            tar -xzf lfs-work.tar.gz -C /mnt
           else
             echo "No previous build found. Starting fresh."
           fi
@@ -35,16 +35,14 @@ jobs:
         uses: mxschmitt/action-tmate@v3
         with:
           sudo: sudo
-
-      - name: Compress updated LFS tree
-        if: always()
+          
+      - name: Save LFS progress
         run: |
           echo "Saving new LFS progress..."
-          tar -czf /mnt/lfs-work.tar.gz -C /mnt lfs
-
-      - name: Upload updated LFS progress
-        if: always()
+          tar -czf lfs-work.tar.gz -C /mnt lfs
+      
+      - name: Upload LFS state
         uses: actions/upload-artifact@v4
         with:
           name: lfs-work
-          path: /mnt/lfs-work.tar.gz
+          path: lfs-work.tar.gz
