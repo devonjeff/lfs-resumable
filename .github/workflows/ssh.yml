@@ -3,15 +3,12 @@ name: SSH Access
 on:
   workflow_dispatch:
 
-permissions:
-  contents: read
-
 jobs:
   ssh:
     runs-on: ubuntu-latest
     steps:
-      - name: Start tmate session (public SSH)
-        uses: mxschmitt/action-tmate@v2
+      - name: Start tmate session
+        uses: mxschmitt/action-tmate@v3
         with:
-          ssh-keys: ${{ secrets.TMATE_KEY }}
-          sudo: true
+          sudo: false         # optional
+          limit-access-to-actor: false   # optional
