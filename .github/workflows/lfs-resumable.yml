@@ -7,6 +7,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
+      actions: write
+      contents: read
 
     steps:
       - name: Prepare /mnt/lfs workspace
@@ -32,7 +34,7 @@ jobs:
       - name: Start tmate session
         uses: mxschmitt/action-tmate@v3
         with:
-          sudo: true
+          sudo: sudo
 
       - name: Compress updated LFS tree
         if: always()
